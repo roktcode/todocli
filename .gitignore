@@ -1,2 +1,3 @@
 cmd/todo
-cmd/.todo.json
+cmd/.*.json
+cmd/bin
