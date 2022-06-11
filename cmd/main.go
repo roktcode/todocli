@@ -26,7 +26,12 @@ func main() {
 	add := flag.Bool("add", false, "Add task to ToDo list")
 	list := flag.Bool("list", false, "List all the tasks")
 	complete := flag.Int("complete", 0, "Mark the task as complete")
-
+	// add delete
+	del := flag.Int("del", 0, "Delete a task from the list")
+	// add verbose flag
+	verbose := flag.Bool("verbose", false, "Show information about tasks")
+	// add an only-completed flag
+	notCompleted := flag.Bool("not-completed", false, "Show only uncompleted tasks")
 	flag.Parse()
 
 	// Check if the user defined the ENV VAR for a custom file name
@@ -45,7 +50,21 @@ func main() {
 	switch {
 	case *list:
 		// print all the tasks
-		fmt.Print(l)
+		if *notCompleted {
+			// print all not completed items
+			if *verbose {
+				fmt.Print(l.Verbose(l.GetUncompleted()))
+			} else {
+				fmt.Println(l.GetUncompleted())
+			}
+		} else {
+			// print all items
+			if *verbose {
+				fmt.Print(l.Verbose(*l))
+			} else {
+				fmt.Print(l)
+			}
+		}
 	case *complete > 0:
 		if err := l.Complete(*complete); err != nil {
 			fmt.Fprintln(os.Stderr, err)
@@ -66,6 +85,17 @@ func main() {
 		}
 
 		l.Add(t)
+		if err := l.Save(todoFilename); err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit(1)
+		}
+	case *del > 0:
+		if err := l.Delete(*del); err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit(1)
+		}
+
+		// save the fie after complete task
 		if err := l.Save(todoFilename); err != nil {
 			fmt.Fprintln(os.Stderr, err)
 			os.Exit(1)
