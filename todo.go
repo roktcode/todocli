@@ -119,3 +119,35 @@ func (l *List) Get(filename string) error {
 	// or return err != nil instead
 	return json.Unmarshal(file, l)
 }
+
+func (_ *List) Verbose(l List) string {
+
+	formatted := ""
+
+	for k, v := range l {
+
+		prefix := "  "
+
+		if v.Done {
+			prefix = "X "
+		}
+
+		// Adjust the item number k to print numbers starting from 1 instead of
+		formatted += fmt.Sprintf("%s%d: %s\t[Created at %s]\n", prefix, k+1, v.Task, v.CreatedAt.Format("01-02-2006 15:04:05"))
+	}
+
+	return formatted
+}
+
+func (l *List) GetUncompleted() List {
+	var notCompleted List
+
+	for _, item := range *l {
+		if !item.Done {
+			notCompleted = append(notCompleted, item)
+		}
+	}
+
+	return notCompleted
+
+}

@@ -18,7 +18,8 @@ func main() {
 	flag.Usage = func() {
 		fmt.Fprintf(flag.CommandLine.Output(), "%s tool. Developed for the to-do list app\n", os.Args[0])
 		fmt.Fprintf(flag.CommandLine.Output(), "Copyright 2022\n")
-		fmt.Fprintln(flag.CommandLine.Output(), "Usga information:")
+		fmt.Fprintln(flag.CommandLine.Output(), "Usage information:")
+		fmt.Fprintln(flag.CommandLine.Output(), "You can add tasks either using the Stdout, by passing data from another program using pipes, or by using the add flag.")
 		flag.PrintDefaults()
 	}
 
@@ -78,13 +79,16 @@ func main() {
 		}
 	case *add:
 		// read the value from stdin (using piping)
-		t, err := getTask(os.Stdin, flag.Args()...)
+		tasks, err := getTask(os.Stdin, flag.Args()...)
 		if err != nil {
 			fmt.Fprintln(os.Stderr, err)
 			os.Exit(1)
 		}
 
-		l.Add(t)
+		for _, t := range tasks {
+			l.Add(t)
+		}
+
 		if err := l.Save(todoFilename); err != nil {
 			fmt.Fprintln(os.Stderr, err)
 			os.Exit(1)
@@ -107,24 +111,32 @@ func main() {
 
 }
 
-func getTask(r io.Reader, args ...string) (string, error) {
+func getTask(r io.Reader, args ...string) ([]string, error) {
 	if len(args) > 0 {
-		return strings.Join(args, " "), nil
+		return []string{strings.Join(args, " ")}, nil
 	}
+
+	// update it to treat each new line as a new task
+	// we will store each new line coming from the scanner as a new task
+	// and store it in a lines
+
+	var lines []string
 
 	// create a scanner to read from io.Reader provided to getTask
 	s := bufio.NewScanner(r)
-	s.Scan()
+
+	for s.Scan() {
+		if err := s.Err(); err != nil {
+			return nil, err
+		}
+		if len(s.Text()) == 0 {
+			// fmt.Errorf returns an error
+			return nil, fmt.Errorf("task can't be blank")
+		}
+		lines = append(lines, s.Text())
+	}
 
 	// if an error occurred, return it
-	if err := s.Err(); err != nil {
-		return "", err
-	}
 
-	if len(s.Text()) == 0 {
-		// fmt.Errorf returns an error
-		return "", fmt.Errorf("Task can't be blank")
-	}
-
-	return s.Text(), nil
+	return lines, nil
 }
