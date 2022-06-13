@@ -1,10 +1,10 @@
-package main
+package cmd
 
 import (
 	"bufio"
 	"flag"
 	"fmt"
-	"github.com/roktcode/todocli"
+	"github.com/roktcode/todocli/todo"
 	"io"
 	"os"
 	"strings"
@@ -13,7 +13,7 @@ import (
 // default file name
 var todoFilename = ".todo.json"
 
-func main() {
+func Run() {
 
 	flag.Usage = func() {
 		fmt.Fprintf(flag.CommandLine.Output(), "%s tool. Developed for the to-do list app\n", os.Args[0])
