@@ -1,15 +1,14 @@
-package todo_test
+package todo
 
 import (
 	"os"
 	"testing"
-	"todo"
 )
 
 // TestAdd tests the Add method of the List type
 func TestAdd(t *testing.T) {
 	// create empty to-do list
-	l := todo.List{}
+	l := List{}
 	taskName := "New Task"
 	l.Add(taskName)
 
@@ -21,7 +20,7 @@ func TestAdd(t *testing.T) {
 
 // TestComplete tests the Complete method of the List type
 func TestComplete(t *testing.T) {
-	l := todo.List{}
+	l := List{}
 	taskName := "New Task"
 	l.Add(taskName)
 
@@ -42,7 +41,7 @@ func TestComplete(t *testing.T) {
 
 // TestDelete tests the Delete method of the List type
 func TestDelete(t *testing.T) {
-	l := todo.List{}
+	l := List{}
 
 	tasks := []string{
 		"New Task 1",
@@ -71,8 +70,8 @@ func TestDelete(t *testing.T) {
 
 // TestSaveGet tests the Save and Get methods of the List type
 func TestSaveGet(t *testing.T) {
-	l1 := todo.List{}
-	l2 := todo.List{}
+	l1 := List{}
+	l2 := List{}
 
 	taskName := "New task"
 	l1.Add(taskName)

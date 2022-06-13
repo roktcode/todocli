@@ -4,10 +4,10 @@ import (
 	"bufio"
 	"flag"
 	"fmt"
+	"github.com/roktcode/todocli"
 	"io"
 	"os"
 	"strings"
-	"todo"
 )
 
 // default file name
