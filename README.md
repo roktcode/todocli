@@ -7,11 +7,7 @@ Features:
 - Complete
 - Delete
 
-You can add tasks from Stdin, or using flags...
-
-**Download the binary version from the releases section n the right
-
-Platforms supported:
+Platforms supported (Download your version from the releases section):
 - Linux x86/x64
 - Windows x86/x64
 - macOS x64
