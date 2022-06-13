@@ -1,13 +1,19 @@
 ### A to-do CLI app built with GO standard library
 
-Features:
+** Install the app from command line:
+```sh
+go install github.com/roktcode/todocli@latest
+```
 
+>You can also download your version from the releases section  on the right
+
+Features:
 - Add
 - View
 - Complete
 - Delete
 
-Platforms supported (Download your version from the releases section):
+Platforms supported:
 - Linux x86/x64
 - Windows x86/x64
 - macOS x64
